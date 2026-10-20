@@ -2,840 +2,795 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cambium-SMP | Hardcore Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cambium-SMP | Hardcore</title>
 
-  <style>
-    /* =========================================
-       CAMBIUM-SMP — PAS HIER JE KLEUREN AAN
-       ========================================= */
-    :root {
-      --background: #11100e;
-      --panel: #1d1a16;
-      --panel-light: #29241e;
-      --gold: #e7b85c;
-      --text: #f5efe3;
-      --muted: #aaa092;
-      --red: #ff5555;
-      --green: #61d98b;
-      --border: #41372a;
-    }
+<style>
+/* ==========================================
+   CAMBIUM-SMP — OUD HOUT & MIDDELEEUWEN
+   Pas deze kleuren aan als je wilt!
+   ========================================== */
+:root {
+  --background: #21160f;
+  --wood: #382519;
+  --wood-light: #4b3020;
+  --wood-dark: #190f0a;
+  --wood-edge: #654329;
+  --gold: #d6ad63;
+  --gold-light: #f0d59b;
+  --parchment: #e9d8b7;
+  --muted: #b5a083;
+  --red: #d94b40;
+  --green: #70ad61;
+  --danger: #ff8377;
+}
 
-    * {
-      box-sizing: border-box;
-    }
+* { box-sizing: border-box; }
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(ellipse at top, #342719 0%, transparent 55%),
-        var(--background);
-      color: var(--text);
-      font-family: Arial, sans-serif;
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--parchment);
+  font-family: Georgia, "Times New Roman", serif;
+  background-color: var(--background);
+  background-image:
+    radial-gradient(ellipse at top, #52372255, transparent 65%),
+    repeating-linear-gradient(
+      90deg,
+      #ffffff03 0px,
+      #ffffff03 2px,
+      transparent 2px,
+      transparent 9px
+    );
+}
 
-    button, input, select {
-      font: inherit;
-    }
+button, input, select { font: inherit; }
 
-    header {
-      text-align: center;
-      padding: 42px 16px 28px;
-      border-bottom: 1px solid var(--border);
-    }
+header {
+  position: relative;
+  text-align: center;
+  padding: 42px 16px 30px;
+  background:
+    linear-gradient(180deg, #4a3020, #28190f);
+  border-bottom: 5px solid var(--wood-dark);
+  box-shadow: 0 5px 0 #654329, 0 12px 25px #0006;
+}
 
-    .logo {
-      font-size: 44px;
-      margin-bottom: 8px;
-    }
+header::before,
+header::after {
+  content: "✦";
+  position: absolute;
+  top: 25px;
+  color: var(--gold);
+  font-size: 23px;
+}
 
-    h1 {
-      margin: 0;
-      color: var(--gold);
-      font-size: clamp(30px, 5vw, 48px);
-      letter-spacing: 3px;
-    }
+header::before { left: 8%; }
+header::after { right: 8%; }
 
-    .subtitle {
-      margin-top: 12px;
-      color: var(--muted);
-    }
+.logo {
+  font-size: 43px;
+  filter: drop-shadow(0 3px 2px #000);
+}
 
-    .warning {
-      display: inline-block;
-      margin-top: 18px;
-      padding: 9px 14px;
-      border: 1px solid #75532a;
-      border-radius: 8px;
-      color: var(--gold);
-      background: #241b11;
-      font-size: 13px;
-    }
+h1 {
+  margin: 8px 0;
+  color: var(--gold-light);
+  font-size: clamp(30px, 5vw, 49px);
+  letter-spacing: 4px;
+  text-shadow: 3px 4px 0 #180d07;
+}
 
-    main {
-      width: min(1100px, 92%);
-      margin: 30px auto 60px;
-    }
+.subtitle {
+  color: var(--muted);
+  letter-spacing: 3px;
+  font-size: 12px;
+}
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-      margin-bottom: 28px;
-    }
+.warning {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 10px 16px;
+  color: var(--gold-light);
+  background: #21150d;
+  border: 1px solid var(--gold);
+  box-shadow: inset 0 0 0 3px #654329;
+  letter-spacing: 1px;
+}
 
-    .stat, .team, .player-card, .admin {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-    }
+main {
+  width: min(1100px, 93%);
+  margin: 34px auto 55px;
+}
 
-    .stat {
-      padding: 22px 12px;
-      text-align: center;
-    }
+.section-heading {
+  margin: 34px 0 16px;
+  padding-bottom: 10px;
+  color: var(--gold);
+  border-bottom: 2px solid var(--wood-edge);
+  text-shadow: 1px 2px #000;
+  letter-spacing: 1px;
+}
 
-    .stat-number {
-      color: var(--gold);
-      font-size: 34px;
-      font-weight: bold;
-    }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 17px;
+}
 
-    .stat-label {
-      margin-top: 7px;
-      color: var(--muted);
-    }
+.stat, .team, .admin {
+  background:
+    linear-gradient(135deg, #4a3020, #2b1b11 60%, #382519);
+  border: 2px solid var(--wood-edge);
+  box-shadow:
+    inset 0 0 0 3px #190f0a,
+    inset 0 0 0 4px #654329,
+    0 5px 10px #0005;
+}
 
-    .section-heading {
-      margin: 30px 0 16px;
-      color: var(--gold);
-    }
+.stat {
+  text-align: center;
+  padding: 22px 10px;
+}
 
-    .teams {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
+.stat-number {
+  font-size: 36px;
+  font-weight: bold;
+  color: var(--gold-light);
+  text-shadow: 2px 2px #000;
+}
 
-    .team {
-      min-width: 0;
-      padding: 20px;
-    }
+.stat-label {
+  margin-top: 8px;
+  color: var(--muted);
+}
 
-    .team h3 {
-      margin: 0 0 8px;
-      font-size: 21px;
-    }
+.teams {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
 
-    .team.red {
-      border-top: 3px solid var(--red);
-    }
+.team {
+  min-width: 0;
+  padding: 20px;
+  position: relative;
+}
 
-    .team.green {
-      border-top: 3px solid var(--green);
-    }
+.team.red { border-top: 5px solid var(--red); }
+.team.green { border-top: 5px solid var(--green); }
 
-    .team-count {
-      margin-bottom: 16px;
-      color: var(--muted);
-      font-size: 13px;
-    }
+.team h3 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  color: var(--gold-light);
+  text-shadow: 1px 2px #000;
+}
 
-    .player-list {
-      display: grid;
-      gap: 10px;
-    }
+.team-count {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 17px;
+}
 
-    .player-card {
-      overflow-wrap: anywhere;
-      padding: 13px;
-      background: var(--panel-light);
-    }
+.player-list { display: grid; gap: 10px; }
 
-    .player-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
+.player-card {
+  padding: 13px;
+  background: #21160f;
+  border: 1px solid var(--wood-edge);
+  box-shadow: inset 0 0 0 2px #190f0a;
+  overflow-wrap: anywhere;
+}
 
-    .player-name {
-      font-weight: bold;
-    }
+.player-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
 
-    .player-role {
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: 12px;
-    }
+.player-name { font-weight: bold; }
 
-    .status {
-      padding: 5px 8px;
-      border-radius: 6px;
-      font-size: 12px;
-      white-space: nowrap;
-    }
+.player-role {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
 
-    .status.alive {
-      color: var(--green);
-      background: #153122;
-    }
+.status {
+  display: inline-block;
+  padding: 5px 8px;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  white-space: nowrap;
+  border: 1px solid currentColor;
+}
 
-    .status.dead {
-      color: var(--red);
-      background: #351a1a;
-    }
+.status.alive { color: var(--green); }
+.status.dead { color: var(--danger); }
 
-    .empty {
-      padding: 15px 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
+.empty {
+  padding: 14px 0;
+  color: var(--muted);
+  font-style: italic;
+}
 
-    .filters, .form-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-    }
+.filters, .form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
 
-    input, select {
-      width: 100%;
-      min-width: 0;
-      padding: 12px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      outline: none;
-      background: #15130f;
-      color: var(--text);
-    }
+input, select {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  color: var(--parchment);
+  background: var(--wood-dark);
+  border: 1px solid var(--wood-edge);
+  border-radius: 2px;
+  outline: none;
+}
 
-    input:focus, select:focus {
-      border-color: var(--gold);
-    }
+input:focus, select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 1px var(--gold);
+}
 
-    .admin {
-      margin-top: 35px;
-      padding: 22px;
-    }
+input::placeholder { color: #9c8568; }
 
-    .admin h2 {
-      margin-top: 0;
-      color: var(--gold);
-    }
+.admin {
+  margin-top: 38px;
+  padding: 23px;
+}
 
-    .admin-description {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.5;
-    }
+.admin h2 { color: var(--gold-light); margin-top: 0; }
+.admin h3 { color: var(--gold); }
 
-    .button-row, .admin-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
-    }
+.admin-description {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
 
-    button {
-      padding: 10px 14px;
-      cursor: pointer;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--panel-light);
-      color: var(--text);
-    }
+.button-row, .admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 14px;
+}
 
-    button:hover {
-      filter: brightness(1.2);
-    }
+button {
+  padding: 10px 13px;
+  cursor: pointer;
+  color: var(--parchment);
+  background: linear-gradient(#523722, #2b1a10);
+  border: 1px solid var(--wood-edge);
+  box-shadow: inset 0 0 0 2px #190f0a;
+  transition: filter .15s, transform .15s;
+}
 
-    .primary {
-      border-color: var(--gold);
-      background: var(--gold);
-      color: #1b1408;
-      font-weight: bold;
-    }
+button:hover {
+  filter: brightness(1.3);
+  transform: translateY(-1px);
+}
 
-    .danger {
-      color: #ff8a8a;
-    }
+.primary {
+  color: #24170b;
+  background: linear-gradient(#f0d59b, #bc8e43);
+  border-color: var(--gold-light);
+  font-weight: bold;
+}
 
-    .admin-player {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-top: 12px;
-      padding: 13px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: #15130f;
-    }
+.danger { color: #ff9388; }
 
-    .hidden {
-      display: none !important;
-    }
+.admin-player {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 13px;
+  background: var(--wood-dark);
+  border: 1px solid var(--wood-edge);
+}
 
-    footer {
-      padding: 24px;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      text-align: center;
-      font-size: 13px;
-    }
+.hidden { display: none !important; }
 
-    @media (max-width: 650px) {
-      .teams, .filters, .form-grid {
-        grid-template-columns: 1fr;
-      }
+footer {
+  padding: 25px 12px;
+  text-align: center;
+  color: var(--muted);
+  background: #190f0a;
+  border-top: 3px solid var(--wood-edge);
+  font-size: 13px;
+  letter-spacing: 1px;
+}
 
-      .admin {
-        padding: 16px;
-      }
-    }
-  </style>
+@media (max-width: 650px) {
+  .teams, .filters, .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin { padding: 16px; }
+  header::before { left: 4%; }
+  header::after { right: 4%; }
+}
+</style>
 </head>
 
 <body>
-  <header>
-    <div class="logo">⚔️</div>
-    <h1>CAMBIUM-SMP</h1>
-    <p class="subtitle">HARDCORE • OVERLEEF. VECHT. WIN.</p>
-    <div class="warning">☠️ Eén leven. Eén wereld. Geen tweede kans.</div>
-  </header>
+<header>
+  <div class="logo">⚔️</div>
+  <h1>CAMBIUM-SMP</h1>
+  <div class="subtitle">HARDCORE • OVERLEEF. VECHT. WIN.</div>
+  <div class="warning">☠ EEN LEVEN. ÉÉN WERELD. GEEN TWEEDE KANS.</div>
+</header>
 
-  <main>
-    <section class="stats">
-      <div class="stat">
-        <div class="stat-number" id="aliveCount">0</div>
-        <div class="stat-label">❤️ Levende spelers</div>
+<main>
+  <section class="stats">
+    <div class="stat">
+      <div class="stat-number" id="aliveCount">0</div>
+      <div class="stat-label">❤️ LEVENDE SPELERS</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number" id="deadCount">0</div>
+      <div class="stat-label">💀 OVERLEDEN SPELERS</div>
+    </div>
+  </section>
+
+  <h2 class="section-heading">🏰 DE TEAMS</h2>
+
+  <section class="teams">
+    <div class="team red">
+      <h3>🔴 ROOD NOORD</h3>
+      <div class="team-count" id="northCount">0 spelers</div>
+      <div class="player-list" id="northPlayers"></div>
+    </div>
+
+    <div class="team green">
+      <h3>🟢 GROEN ZUID</h3>
+      <div class="team-count" id="southCount">0 spelers</div>
+      <div class="player-list" id="southPlayers"></div>
+    </div>
+  </section>
+
+  <h2 class="section-heading">📜 SPELERSREGISTER</h2>
+
+  <section class="filters">
+    <input id="searchInput" type="search" placeholder="🔎 Zoek een speler...">
+
+    <select id="teamFilter">
+      <option value="all">Alle teams</option>
+      <option value="Noord">Rood Noord</option>
+      <option value="Zuid">Groen Zuid</option>
+      <option value="Geen">Geen team</option>
+    </select>
+
+    <select id="statusFilter">
+      <option value="all">Alle statussen</option>
+      <option value="alive">Alleen levend</option>
+      <option value="dead">Alleen overleden</option>
+    </select>
+  </section>
+
+  <div class="player-list" id="allPlayers" style="margin-top:16px"></div>
+
+  <section class="admin">
+    <h2>🔐 BEHEERDERSKAMER</h2>
+    <p class="admin-description">
+      Alleen beheerders horen hier spelers te beheren.
+      Voeg spelers toe, wijs teams toe en registreer sterfgevallen.
+    </p>
+
+    <div id="loginArea">
+      <label for="adminCode">Beheerderswachtwoord</label>
+      <input id="adminCode" type="password"
+        placeholder="Voer het wachtwoord in"
+        autocomplete="current-password" style="margin-top:8px">
+      <div class="button-row">
+        <button class="primary" id="loginButton" type="button">🔑 Inloggen</button>
       </div>
-      <div class="stat">
-        <div class="stat-number" id="deadCount">0</div>
-        <div class="stat-label">💀 Overleden spelers</div>
-      </div>
-    </section>
-
-    <h2 class="section-heading">🏰 De teams</h2>
-
-    <section class="teams">
-      <div class="team red">
-        <h3>🔴 ROOD NOORD</h3>
-        <div class="team-count" id="northCount">0 spelers</div>
-        <div class="player-list" id="northPlayers"></div>
-      </div>
-
-      <div class="team green">
-        <h3>🟢 GROEN ZUID</h3>
-        <div class="team-count" id="southCount">0 spelers</div>
-        <div class="player-list" id="southPlayers"></div>
-      </div>
-    </section>
-
-    <h2 class="section-heading">📜 Spelersoverzicht</h2>
-
-    <section class="filters">
-      <input id="searchInput" type="search" placeholder="🔎 Zoek een speler...">
-
-      <select id="teamFilter">
-        <option value="all">Alle teams</option>
-        <option value="Noord">Rood Noord</option>
-        <option value="Zuid">Groen Zuid</option>
-        <option value="Geen">Geen team</option>
-      </select>
-
-      <select id="statusFilter">
-        <option value="all">Levend en overleden</option>
-        <option value="alive">Alleen levend</option>
-        <option value="dead">Alleen overleden</option>
-      </select>
-    </section>
-
-    <div class="player-list" id="allPlayers" style="margin-top:16px"></div>
-
-    <section class="admin">
-      <h2>🔐 Beheerderspaneel</h2>
       <p class="admin-description">
-        Voeg spelers toe, verander hun team of pas hun status aan.
-        Je wijzigingen worden voorlopig in deze browser opgeslagen.
+        Deze login is alleen bedoeld als tijdelijke demo.
+        De code staat in de openbare websitebroncode en beveiligt de gegevens niet echt.
       </p>
+    </div>
 
-      <div id="loginArea">
-        <label for="adminCode">Beheerderswachtwoord</label>
-        <input
-          id="adminCode"
-          type="password"
-          placeholder="Voer wachtwoord in"
-          autocomplete="current-password"
-          style="margin-top:8px"
-        >
-        <div class="button-row">
-          <button class="primary" id="loginButton" type="button">Inloggen</button>
+    <div id="adminArea" class="hidden">
+      <h3 id="formTitle">➕ Nieuwe speler toevoegen</h3>
+
+      <form id="playerForm">
+        <div class="form-grid">
+          <input id="playerName" type="text" maxlength="32"
+            placeholder="Minecraft-naam" required>
+
+          <select id="playerTeam">
+            <option value="Noord">🔴 Rood Noord</option>
+            <option value="Zuid">🟢 Groen Zuid</option>
+            <option value="Geen">⚪ Geen team</option>
+          </select>
+
+          <input id="playerRole" type="text" maxlength="60"
+            placeholder="Rol (bijv. Owner)">
         </div>
-        <p class="admin-description">
-          Let op: dit is een eenvoudige demo-login. Omdat de websitecode
-          openbaar is, is dit geen veilige beveiliging voor echte gegevens.
-        </p>
-      </div>
 
-      <div id="adminArea" class="hidden">
-        <h3 id="formTitle">➕ Speler toevoegen</h3>
-
-        <form id="playerForm">
-          <div class="form-grid">
-            <input
-              id="playerName"
-              type="text"
-              maxlength="32"
-              placeholder="Minecraft-naam"
-              required
-            >
-
-            <select id="playerTeam">
-              <option value="Noord">🔴 Rood Noord</option>
-              <option value="Zuid">🟢 Groen Zuid</option>
-              <option value="Geen">⚪ Geen team</option>
-            </select>
-
-            <input
-              id="playerRole"
-              type="text"
-              maxlength="60"
-              placeholder="Rol (bijv. Owner)"
-            >
-          </div>
-
-          <div style="margin-top:12px">
-            <label for="playerAlive">Spelerstatus</label>
-            <select id="playerAlive" style="margin-top:8px">
-              <option value="true">❤️ Levend</option>
-              <option value="false">💀 Overleden</option>
-            </select>
-          </div>
-
-          <div class="button-row">
-            <button class="primary" id="saveButton" type="submit">
-              Speler opslaan
-            </button>
-            <button id="cancelEdit" class="hidden" type="button">
-              Bewerken annuleren
-            </button>
-          </div>
-        </form>
-
-        <h3 style="margin-top:30px">👥 Spelers beheren</h3>
-        <div id="adminPlayers"></div>
+        <div style="margin-top:12px">
+          <label for="playerAlive">Status van de speler</label>
+          <select id="playerAlive" style="margin-top:8px">
+            <option value="true">❤️ Levend</option>
+            <option value="false">💀 Overleden</option>
+          </select>
+        </div>
 
         <div class="button-row">
-          <button id="exportButton" type="button">⬇️ Back-up downloaden</button>
-          <button id="importButton" type="button">⬆️ Back-up importeren</button>
-          <button id="logoutButton" type="button">Uitloggen</button>
-          <input id="importFile" type="file" accept=".json,application/json" class="hidden">
+          <button class="primary" id="saveButton" type="submit">
+            💾 Speler opslaan
+          </button>
+          <button id="cancelEdit" class="hidden" type="button">
+            Annuleren
+          </button>
         </div>
+      </form>
 
-        <p class="admin-description">
-          Maak regelmatig een back-up. Gegevens staan nog niet centraal
-          online en worden niet automatisch met andere bezoekers gedeeld.
-        </p>
+      <h3 style="margin-top:30px">📋 Spelers beheren</h3>
+      <div id="adminPlayers"></div>
+
+      <div class="button-row">
+        <button id="exportButton" type="button">⬇ Back-up downloaden</button>
+        <button id="importButton" type="button">⬆ Back-up importeren</button>
+        <button id="logoutButton" type="button">Uitloggen</button>
+        <input id="importFile" type="file" accept=".json,application/json" class="hidden">
       </div>
-    </section>
-  </main>
 
-  <footer>
-    ⚔️ CAMBIUM-SMP • HARDCORE DASHBOARD
-    <br>
-    Gebouwd voor de Cambium-SMP-community
-  </footer>
+      <p class="admin-description">
+        Maak regelmatig een back-up. Spelersgegevens zijn momenteel alleen
+        beschikbaar in deze browser en worden niet gedeeld met andere bezoekers.
+      </p>
+    </div>
+  </section>
+</main>
 
-  <script>
-    /* =========================================
-       CAMBIUM-SMP — INSTELLINGEN
-       ========================================= */
+<footer>
+  ⚔ CAMBIUM-SMP • HARDCORE SURVIVAL
+  <br><br>
+  GESMEED IN HOUT. BEPROEFD IN HARDCORE.
+</footer>
 
-    const ADMIN_CODE = "AdminPasword";
-    const STORAGE_KEY = "cambiumSmpPlayersV1";
+<script>
+/* ==========================================
+   CAMBIUM-SMP — BEHEER EN SPELERS
+   ========================================== */
 
-    /*
-      Spelers worden lokaal in deze browser opgeslagen.
-      Voor gedeelde live gegevens is later een backend nodig.
-    */
+const ADMIN_CODE = "AdminPasword";
+const STORAGE_KEY = "cambiumSmpPlayersV1";
 
-    let players = loadPlayers();
-    let editingId = null;
-    let loggedIn = false;
+let players = loadPlayers();
+let editingId = null;
+let loggedIn = false;
 
-    function createId() {
-      return Date.now().toString(36) +
-        Math.random().toString(36).slice(2, 9);
-    }
+function createId() {
+  return Date.now().toString(36) +
+    Math.random().toString(36).slice(2, 9);
+}
 
-    function loadPlayers() {
-      try {
-        const saved = localStorage.getItem(STORAGE_KEY);
+function loadPlayers() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return [];
 
-        if (!saved) return [];
+    const data = JSON.parse(saved);
+    if (!Array.isArray(data)) return [];
 
-        const loaded = JSON.parse(saved);
+    return data.map(p => ({
+      id: String(p.id || createId()),
+      name: String(p.name || "Onbekende speler"),
+      team: p.team === "Rood" ? "Noord" :
+            p.team === "Groen" ? "Zuid" :
+            ["Noord", "Zuid", "Geen"].includes(p.team) ? p.team : "Geen",
+      role: String(p.role || ""),
+      alive: p.alive !== false
+    }));
+  } catch (error) {
+    console.error("Spelers laden mislukt:", error);
+    return [];
+  }
+}
 
-        if (!Array.isArray(loaded)) return [];
+function savePlayers() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(players));
+    render();
+  } catch (error) {
+    alert("Opslaan mislukt. Controleer de browserinstellingen.");
+  }
+}
 
-        // Compatibiliteit met de eerdere versie van het dashboard.
-        return loaded.map(player => ({
-          id: String(player.id || createId()),
-          name: String(player.name || "Onbekende speler"),
-          team:
-            player.team === "Rood" ? "Noord" :
-            player.team === "Groen" ? "Zuid" :
-            ["Noord", "Zuid", "Geen"].includes(player.team)
-              ? player.team : "Geen",
-          role: String(player.role || ""),
-          alive: player.alive !== false
-        }));
-      } catch (error) {
-        console.error("Spelers konden niet worden geladen:", error);
-        return [];
-      }
-    }
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[c]);
+}
 
-    function savePlayers() {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(players));
-        render();
-      } catch (error) {
-        alert("Opslaan is mislukt. Controleer of je browser opslag toestaat.");
-      }
-    }
+function statusHTML(player) {
+  return player.alive
+    ? '<span class="status alive">❤️ LEVEND</span>'
+    : '<span class="status dead">💀 OVERLEDEN</span>';
+}
 
-    function escapeHTML(value) {
-      return String(value).replace(/[&<>"']/g, character => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-      })[character]);
-    }
+function playerCard(player) {
+  return `
+    <article class="player-card">
+      <div class="player-top">
+        <span class="player-name">${escapeHTML(player.name)}</span>
+        ${statusHTML(player)}
+      </div>
+      <div class="player-role">
+        ${escapeHTML(player.role || "Geen rol ingesteld")}
+      </div>
+      ${!player.alive
+        ? '<div class="player-role">📍 Verliezerseiland</div>'
+        : ""}
+    </article>
+  `;
+}
 
-    function statusHTML(player) {
-      return player.alive
-        ? '<span class="status alive">❤️ Levend</span>'
-        : '<span class="status dead">💀 Overleden</span>';
-    }
+function showTeam(team, listId, countId) {
+  const list = players.filter(p => p.team === team);
+  const living = list.filter(p => p.alive).length;
 
-    function playerCard(player) {
-      return `
-        <article class="player-card">
-          <div class="player-top">
-            <span class="player-name">${escapeHTML(player.name)}</span>
-            ${statusHTML(player)}
-          </div>
-          <div class="player-role">
-            ${escapeHTML(player.role || "Geen rol ingesteld")}
-          </div>
-          ${!player.alive
-            ? '<div class="player-role">📍 Verliezerseiland</div>'
-            : ''}
-        </article>
-      `;
-    }
+  document.getElementById(countId).textContent =
+    `${list.length} spelers • ${living} levend`;
 
-    function showTeam(team, elementId, countId) {
-      const teamPlayers = players.filter(player => player.team === team);
-      const aliveCount = teamPlayers.filter(player => player.alive).length;
+  document.getElementById(listId).innerHTML = list.length
+    ? list.map(playerCard).join("")
+    : '<div class="empty">Nog geen spelers in dit team.</div>';
+}
 
-      document.getElementById(countId).textContent =
-        `${teamPlayers.length} spelers • ${aliveCount} levend`;
+function renderAllPlayers() {
+  const search = document.getElementById("searchInput")
+    .value.trim().toLowerCase();
+  const team = document.getElementById("teamFilter").value;
+  const status = document.getElementById("statusFilter").value;
 
-      const container = document.getElementById(elementId);
+  const filtered = players.filter(p =>
+    p.name.toLowerCase().includes(search) &&
+    (team === "all" || p.team === team) &&
+    (status === "all" ||
+      (status === "alive" && p.alive) ||
+      (status === "dead" && !p.alive))
+  );
 
-      container.innerHTML = teamPlayers.length
-        ? teamPlayers.map(playerCard).join("")
-        : '<div class="empty">Nog geen spelers in dit team.</div>';
-    }
+  document.getElementById("allPlayers").innerHTML = filtered.length
+    ? filtered.map(playerCard).join("")
+    : '<div class="empty">Geen spelers gevonden.</div>';
+}
 
-    function renderAllPlayers() {
-      const search = document.getElementById("searchInput")
-        .value.trim().toLowerCase();
+function renderAdminPlayers() {
+  if (!loggedIn) return;
 
-      const team = document.getElementById("teamFilter").value;
-      const status = document.getElementById("statusFilter").value;
+  const container = document.getElementById("adminPlayers");
 
-      const filtered = players.filter(player => {
-        const matchesName = player.name.toLowerCase().includes(search);
-        const matchesTeam = team === "all" || player.team === team;
-        const matchesStatus =
-          status === "all" ||
-          (status === "alive" && player.alive) ||
-          (status === "dead" && !player.alive);
+  if (!players.length) {
+    container.innerHTML =
+      '<div class="empty">Nog geen spelers toegevoegd.</div>';
+    return;
+  }
 
-        return matchesName && matchesTeam && matchesStatus;
-      });
-
-      document.getElementById("allPlayers").innerHTML = filtered.length
-        ? filtered.map(playerCard).join("")
-        : '<div class="empty">Geen spelers gevonden.</div>';
-    }
-
-    function renderAdminPlayers() {
-      if (!loggedIn) return;
-
-      const container = document.getElementById("adminPlayers");
-
-      if (!players.length) {
-        container.innerHTML =
-          '<div class="empty">Er zijn nog geen spelers toegevoegd.</div>';
-        return;
-      }
-
-      container.innerHTML = players.map(player => `
-        <div class="admin-player">
-          <div>
-            <strong>${escapeHTML(player.name)}</strong>
-            <div class="player-role">
-              ${player.team === "Noord" ? "🔴 Rood Noord" :
-                player.team === "Zuid" ? "🟢 Groen Zuid" : "⚪ Geen team"}
-              • ${player.alive ? "Levend" : "Overleden"}
-            </div>
-          </div>
-          <div class="admin-actions">
-            <button type="button" data-action="toggle" data-id="${escapeHTML(player.id)}">
-              ${player.alive ? "💀 Markeer dood" : "❤️ Maak levend"}
-            </button>
-            <button type="button" data-action="edit" data-id="${escapeHTML(player.id)}">
-              ✏️ Bewerken
-            </button>
-            <button type="button" class="danger" data-action="delete" data-id="${escapeHTML(player.id)}">
-              🗑️ Verwijderen
-            </button>
-          </div>
+  container.innerHTML = players.map(p => `
+    <div class="admin-player">
+      <div>
+        <strong>${escapeHTML(p.name)}</strong>
+        <div class="player-role">
+          ${p.team === "Noord" ? "🔴 Rood Noord" :
+            p.team === "Zuid" ? "🟢 Groen Zuid" : "⚪ Geen team"}
+          • ${p.alive ? "Levend" : "Overleden"}
         </div>
-      `).join("");
+      </div>
+      <div class="admin-actions">
+        <button type="button" data-action="toggle" data-id="${escapeHTML(p.id)}">
+          ${p.alive ? "💀 Markeer dood" : "❤️ Maak levend"}
+        </button>
+        <button type="button" data-action="edit" data-id="${escapeHTML(p.id)}">
+          ✏ Bewerken
+        </button>
+        <button type="button" class="danger" data-action="delete" data-id="${escapeHTML(p.id)}">
+          🗑 Verwijderen
+        </button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function render() {
+  document.getElementById("aliveCount").textContent =
+    players.filter(p => p.alive).length;
+  document.getElementById("deadCount").textContent =
+    players.filter(p => !p.alive).length;
+
+  showTeam("Noord", "northPlayers", "northCount");
+  showTeam("Zuid", "southPlayers", "southCount");
+
+  renderAllPlayers();
+  renderAdminPlayers();
+}
+
+function resetForm() {
+  editingId = null;
+  document.getElementById("playerForm").reset();
+  document.getElementById("playerTeam").value = "Noord";
+  document.getElementById("playerAlive").value = "true";
+  document.getElementById("formTitle").textContent = "➕ Nieuwe speler toevoegen";
+  document.getElementById("saveButton").textContent = "💾 Speler opslaan";
+  document.getElementById("cancelEdit").classList.add("hidden");
+}
+
+function editPlayer(id) {
+  const p = players.find(player => player.id === id);
+  if (!p) return;
+
+  editingId = id;
+  document.getElementById("playerName").value = p.name;
+  document.getElementById("playerTeam").value = p.team;
+  document.getElementById("playerRole").value = p.role;
+  document.getElementById("playerAlive").value = String(p.alive);
+  document.getElementById("formTitle").textContent = "✏ Speler bewerken";
+  document.getElementById("saveButton").textContent = "💾 Wijzigingen opslaan";
+  document.getElementById("cancelEdit").classList.remove("hidden");
+
+  document.getElementById("playerForm").scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+}
+
+document.getElementById("loginButton").addEventListener("click", () => {
+  if (document.getElementById("adminCode").value !== ADMIN_CODE) {
+    alert("Onjuist wachtwoord!");
+    return;
+  }
+
+  loggedIn = true;
+  document.getElementById("loginArea").classList.add("hidden");
+  document.getElementById("adminArea").classList.remove("hidden");
+  document.getElementById("adminCode").value = "";
+  renderAdminPlayers();
+});
+
+document.getElementById("adminCode").addEventListener("keydown", event => {
+  if (event.key === "Enter") {
+    document.getElementById("loginButton").click();
+  }
+});
+
+document.getElementById("logoutButton").addEventListener("click", () => {
+  loggedIn = false;
+  resetForm();
+  document.getElementById("adminArea").classList.add("hidden");
+  document.getElementById("loginArea").classList.remove("hidden");
+});
+
+document.getElementById("playerForm").addEventListener("submit", event => {
+  event.preventDefault();
+  if (!loggedIn) return;
+
+  const name = document.getElementById("playerName").value.trim();
+  if (!name) return;
+
+  const data = {
+    name,
+    team: document.getElementById("playerTeam").value,
+    role: document.getElementById("playerRole").value.trim(),
+    alive: document.getElementById("playerAlive").value === "true"
+  };
+
+  if (editingId) {
+    players = players.map(p =>
+      p.id === editingId ? { ...p, ...data } : p
+    );
+  } else {
+    if (players.some(p => p.name.toLowerCase() === name.toLowerCase())) {
+      alert("Deze speler staat al in het overzicht.");
+      return;
     }
+    players.push({ id: createId(), ...data });
+  }
 
-    function render() {
-      document.getElementById("aliveCount").textContent =
-        players.filter(player => player.alive).length;
+  savePlayers();
+  resetForm();
+});
 
-      document.getElementById("deadCount").textContent =
-        players.filter(player => !player.alive).length;
+document.getElementById("cancelEdit").addEventListener("click", resetForm);
 
-      showTeam("Noord", "northPlayers", "northCount");
-      showTeam("Zuid", "southPlayers", "southCount");
+document.getElementById("adminPlayers").addEventListener("click", event => {
+  const button = event.target.closest("button[data-action]");
+  if (!button || !loggedIn) return;
 
-      renderAllPlayers();
-      renderAdminPlayers();
+  const id = button.dataset.id;
+  const p = players.find(player => player.id === id);
+  if (!p) return;
+
+  if (button.dataset.action === "edit") {
+    editPlayer(id);
+  } else if (button.dataset.action === "toggle") {
+    p.alive = !p.alive;
+    savePlayers();
+  } else if (button.dataset.action === "delete") {
+    if (confirm(`Weet je zeker dat je ${p.name} wilt verwijderen?`)) {
+      players = players.filter(player => player.id !== id);
+      if (editingId === id) resetForm();
+      savePlayers();
     }
+  }
+});
 
-    function resetForm() {
-      editingId = null;
-      document.getElementById("playerForm").reset();
-      document.getElementById("playerTeam").value = "Noord";
-      document.getElementById("playerAlive").value = "true";
-      document.getElementById("formTitle").textContent = "➕ Speler toevoegen";
-      document.getElementById("saveButton").textContent = "Speler opslaan";
-      document.getElementById("cancelEdit").classList.add("hidden");
-    }
+document.getElementById("searchInput").addEventListener("input", renderAllPlayers);
+document.getElementById("teamFilter").addEventListener("change", renderAllPlayers);
+document.getElementById("statusFilter").addEventListener("change", renderAllPlayers);
 
-    function editPlayer(id) {
-      const player = players.find(item => item.id === id);
-      if (!player) return;
+document.getElementById("exportButton").addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify(players, null, 2)], {
+    type: "application/json"
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "cambium-smp-backup.json";
+  link.click();
+  URL.revokeObjectURL(url);
+});
 
-      editingId = id;
+document.getElementById("importButton").addEventListener("click", () => {
+  document.getElementById("importFile").click();
+});
 
-      document.getElementById("playerName").value = player.name;
-      document.getElementById("playerTeam").value = player.team;
-      document.getElementById("playerRole").value = player.role;
-      document.getElementById("playerAlive").value = String(player.alive);
+document.getElementById("importFile").addEventListener("change", async event => {
+  if (!loggedIn) return;
 
-      document.getElementById("formTitle").textContent = "✏️ Speler bewerken";
-      document.getElementById("saveButton").textContent = "Wijzigingen opslaan";
-      document.getElementById("cancelEdit").classList.remove("hidden");
+  const file = event.target.files[0];
+  if (!file) return;
 
-      document.getElementById("playerForm").scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
-    }
+  try {
+    const data = JSON.parse(await file.text());
+    if (!Array.isArray(data)) throw new Error("Geen geldige spelerslijst.");
 
-    document.getElementById("loginButton").addEventListener("click", () => {
-      const password = document.getElementById("adminCode").value;
-
-      if (password !== ADMIN_CODE) {
-        alert("Onjuist wachtwoord!");
-        return;
+    const imported = data.map(p => {
+      if (!p || typeof p.name !== "string") {
+        throw new Error("Een speler heeft geen geldige naam.");
       }
 
-      loggedIn = true;
-      document.getElementById("loginArea").classList.add("hidden");
-      document.getElementById("adminArea").classList.remove("hidden");
-      document.getElementById("adminCode").value = "";
-      renderAdminPlayers();
-    });
-
-    document.getElementById("adminCode").addEventListener("keydown", event => {
-      if (event.key === "Enter") {
-        document.getElementById("loginButton").click();
-      }
-    });
-
-    document.getElementById("logoutButton").addEventListener("click", () => {
-      loggedIn = false;
-      resetForm();
-      document.getElementById("adminArea").classList.add("hidden");
-      document.getElementById("loginArea").classList.remove("hidden");
-    });
-
-    document.getElementById("playerForm").addEventListener("submit", event => {
-      event.preventDefault();
-
-      if (!loggedIn) return;
-
-      const name = document.getElementById("playerName").value.trim();
-
-      if (!name) {
-        alert("Vul een Minecraft-naam in.");
-        return;
-      }
-
-      const playerData = {
-        name,
-        team: document.getElementById("playerTeam").value,
-        role: document.getElementById("playerRole").value.trim(),
-        alive: document.getElementById("playerAlive").value === "true"
+      return {
+        id: String(p.id || createId()),
+        name: p.name.slice(0, 32),
+        team: p.team === "Rood" ? "Noord" :
+              p.team === "Groen" ? "Zuid" :
+              ["Noord", "Zuid", "Geen"].includes(p.team) ? p.team : "Geen",
+        role: String(p.role || "").slice(0, 60),
+        alive: p.alive !== false
       };
+    });
 
-      if (editingId) {
-        players = players.map(player =>
-          player.id === editingId
-            ? { ...player, ...playerData }
-            : player
-        );
-      } else {
-        const duplicate = players.some(
-          player => player.name.toLowerCase() === name.toLowerCase()
-        );
-
-        if (duplicate) {
-          alert("Deze speler staat al in het overzicht.");
-          return;
-        }
-
-        players.push({
-          id: createId(),
-          ...playerData
-        });
-      }
-
+    if (confirm(`De back-up bevat ${imported.length} spelers. De huidige lijst vervangen?`)) {
+      players = imported;
       savePlayers();
       resetForm();
-    });
+      alert("Back-up geïmporteerd!");
+    }
+  } catch (error) {
+    alert("Importeren mislukt: " + error.message);
+  } finally {
+    event.target.value = "";
+  }
+});
 
-    document.getElementById("cancelEdit").addEventListener("click", resetForm);
-
-    document.getElementById("adminPlayers").addEventListener("click", event => {
-      const button = event.target.closest("button[data-action]");
-      if (!button || !loggedIn) return;
-
-      const id = button.dataset.id;
-      const action = button.dataset.action;
-      const player = players.find(item => item.id === id);
-
-      if (!player) return;
-
-      if (action === "edit") {
-        editPlayer(id);
-      }
-
-      if (action === "toggle") {
-        player.alive = !player.alive;
-        savePlayers();
-      }
-
-      if (action === "delete") {
-        if (confirm(`Weet je zeker dat je ${player.name} wilt verwijderen?`)) {
-          players = players.filter(item => item.id !== id);
-
-          if (editingId === id) resetForm();
-
-          savePlayers();
-        }
-      }
-    });
-
-    document.getElementById("searchInput").addEventListener("input", renderAllPlayers);
-    document.getElementById("teamFilter").addEventListener("change", renderAllPlayers);
-    document.getElementById("statusFilter").addEventListener("change", renderAllPlayers);
-
-    document.getElementById("exportButton").addEventListener("click", () => {
-      const file = new Blob([JSON.stringify(players, null, 2)], {
-        type: "application/json"
-      });
-
-      const url = URL.createObjectURL(file);
-      const link = document.createElement("a");
-
-      link.href = url;
-      link.download = "cambium-smp-backup.json";
-      link.click();
-
-      URL.revokeObjectURL(url);
-    });
-
-    document.getElementById("importButton").addEventListener("click", () => {
-      document.getElementById("importFile").click();
-    });
-
-    document.getElementById("importFile").addEventListener("change", async event => {
-      if (!loggedIn) return;
-
-      const file = event.target.files[0];
-      if (!file) return;
-
-      try {
-        const imported = JSON.parse(await file.text());
-
-        if (!Array.isArray(imported)) {
-          throw new Error("Het bestand bevat geen spelerslijst.");
-        }
-
-        const validPlayers = imported.map(player => {
-          if (!player || typeof player.name !== "string") {
-            throw new Error("Een speler heeft geen geldige naam.");
-          }
-
-          const oldTeam = player.team;
-          const team =
-            oldTeam === "Rood" ? "Noord" :
-            oldTeam === "Groen" ? "Zuid" :
-            ["Noord", "Zuid", "Geen"].includes(oldTeam) ? oldTeam : "Geen";
-
-          return {
-            id: String(player.id || createId()),
-            name: player.name.slice(0, 32),
-            team,
-            role: String(player.role || "").slice(0, 60),
-            alive: player.alive !== false
-          };
-        });
-
-        if (confirm(`De back-up bevat ${validPlayers.length} spelers. De huidige lijst vervangen?`)) {
-          players = validPlayers;
-          savePlayers();
-          resetForm();
-          alert("Back-up succesvol geïmporteerd!");
-        }
-      } catch (error) {
-        alert("Importeren mislukt: " + error.message);
-      } finally {
-        event.target.value = "";
-      }
-    });
-
-    // Oude teamnamen worden bij het laden automatisch omgezet.
-    savePlayers();
-  </script>
+// Migreer oude teamnamen en sla de huidige gegevens op.
+savePlayers();
+</script>
 </body>
 </html>
